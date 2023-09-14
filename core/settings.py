@@ -30,7 +30,9 @@ INSTALLED_APPS += [
     'django_celery_beat',
 ]
 
-INSTALLED_APPS += []
+INSTALLED_APPS += [
+    'author',
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
