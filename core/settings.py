@@ -35,6 +35,7 @@ INSTALLED_APPS += [
     'author',
     'articles',
     'categories',
+    'comments',
     'keywords',
 ]
 
