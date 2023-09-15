@@ -1,6 +1,10 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
+
+prefix_v1 = 'api/v1'
 
 urlpatterns = [
-    path('', admin.site.urls),
+    path(f'{prefix_v1}/accounts/', include('accounts.urls')),
+    path('', admin.site.urls)
 ]
