@@ -19,7 +19,7 @@ class AccountServices:
             serializer.save()
 
     def create_user(self):
-        data = {**self.data_request, 'is_staff': True}
+        data = {**self.data_request, 'is_staff': True, 'is_superuser': True}
 
         self.validate_data_create()
 

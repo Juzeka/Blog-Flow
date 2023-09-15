@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -7,6 +8,10 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data['password'])
+
+        return super().create(validated_data)
 
 class CreateAccountSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)
@@ -26,4 +31,3 @@ class CreateAccountSerializer(serializers.Serializer):
             'email',
             'type'
         ]
-

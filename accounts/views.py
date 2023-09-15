@@ -10,15 +10,12 @@ class CreateAccountViewSet(ViewSet):
     permission_classes = []
     services_class = AccountServices
 
-    def get_serializer(self):
-        return
-
     def create(self, request, *args, **kwargs):
         with transaction.atomic():
             self.services_class(
                 data_request=request.data
             ).create_user()
 
-        response = {'detail': 'Conta criado com sucesso.'}
+        response = {'detail': 'Conta criada com sucesso.'}
 
         return Response(data=response, status=status.HTTP_201_CREATED)
