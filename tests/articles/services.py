@@ -1,9 +1,11 @@
 from utilities.tests import BaseViewTestCase
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from parameterized import parameterized
 from articles.serializers import ArticleSerializer
 from articles.services import ArticleServices
 from categories.factories import CategoryFactory
 from author.factories import AuthorFactory
+from accounts.factories import UserFactory
 
 
 TEST_CASE_CREATE = [
@@ -24,13 +26,29 @@ TEST_CASE_CREATE = [
 
 class ArticleServicesTestCase(BaseViewTestCase):
 
+    def base_create(self, data, user):
+        data.update({'category': CategoryFactory().id})
+
+        return ArticleServices(user=user, data_request=data).create()
+
     @parameterized.expand(TEST_CASE_CREATE)
     def test_create(self, data):
-        category = CategoryFactory()
         author = AuthorFactory()
-
-        data.update({'category': category.id})
-
-        result = ArticleServices(user=author.user, data_request=data).create()
+        result = self.base_create(data=data, user=author.user)
 
         self.assertIsInstance(result, ArticleSerializer)
+
+    def test_exception_validation_user_author(self):
+        data = {
+            'title': 'Titulo 1',
+            'subtitle': 'Subtitulo 1',
+            'content': 'Conteudo 1',
+            'keywords': [{'name': 'key 1'}, {'name': 'key 2'}]
+        }
+
+        try:
+            self.base_create(data=data, user=UserFactory())
+        except PermissionDenied as e:
+            detail = e.detail['detail'].capitalize()
+
+            self.assertEqual(detail, 'Somente um autor pode criar um artigo.')
