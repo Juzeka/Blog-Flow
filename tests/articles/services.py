@@ -33,22 +33,22 @@ class ArticleServicesTestCase(BaseViewTestCase):
 
     @parameterized.expand(TEST_CASE_CREATE)
     def test_create(self, data):
-        author = AuthorFactory()
-        result = self.base_create(data=data, user=author.user)
+        result = self.base_create(data=data, user=AuthorFactory().user)
 
         self.assertIsInstance(result, ArticleSerializer)
 
     def test_exception_validation_user_author(self):
-        data = {
-            'title': 'Titulo 1',
-            'subtitle': 'Subtitulo 1',
-            'content': 'Conteudo 1',
-            'keywords': [{'name': 'key 1'}, {'name': 'key 2'}]
-        }
-
         try:
-            self.base_create(data=data, user=UserFactory())
+            self.base_create(data=dict(), user=UserFactory())
         except PermissionDenied as e:
             detail = e.detail['detail'].capitalize()
 
             self.assertEqual(detail, 'Somente um autor pode criar um artigo.')
+
+    def test_exception_validation_keywords_in_data_request(self):
+        try:
+            self.base_create(data=dict(), user=AuthorFactory().user)
+        except ValidationError as e:
+            detail = e.detail['detail'].capitalize()
+
+            self.assertEqual(detail, 'O campo keywords é obrigatório.')
