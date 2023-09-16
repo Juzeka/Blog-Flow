@@ -10,6 +10,7 @@ DATAS_CREATE_MULTIPLE = [{'name': 'key 4'}, {'name': 'key 3'}]
 CASE_CREATE_MULTIPLE = [
     ({'datas': DATAS_CREATE_MULTIPLE, 'return_type': 'instance'}, Keyword),
     ({'datas': DATAS_CREATE_MULTIPLE, 'return_type': 'data'}, ReturnDict),
+    ({'datas': DATAS_CREATE_MULTIPLE, 'return_type': 'id'}, int),
     (
         {'datas': DATAS_CREATE_MULTIPLE, 'return_type': 'serializer'},
         KeywordSerializer
