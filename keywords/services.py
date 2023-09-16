@@ -1,4 +1,7 @@
-from keywords.serializers import KeywordSerializer
+from keywords.serializers import (
+    KeywordSerializer,
+    KeywordMultipleSerializer
+)
 
 
 class KeywordServices:
@@ -14,8 +17,11 @@ class KeywordServices:
         return serializer
 
     def create_multiple(self):
-        list_data = self.data_multiple['datas']
-        return_type = self.data_multiple['return_type']
+        serializer = KeywordMultipleSerializer(data=self.data_multiple)
+        serializer.is_valid(raise_exception=True)
+
+        list_data = serializer.data['datas']
+        return_type = serializer.data['return_type']
         return_list = list()
 
         for data in list_data:
