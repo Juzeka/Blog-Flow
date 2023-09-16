@@ -15,6 +15,6 @@ class NameChildSerializer(serializers.Serializer):
 class KeywordMultipleSerializer(serializers.Serializer):
     datas = serializers.ListField(child=NameChildSerializer())
     return_type = serializers.ChoiceField(
-        choices=['serializer', 'instance', 'data'],
+        choices=['serializer', 'instance', 'data', 'id'],
         default='serializer'
     )

@@ -30,6 +30,8 @@ class KeywordServices:
 
             if return_type == 'instance':
                 result = result.instance
+            elif return_type == 'id':
+                result = result.instance.id
             elif return_type == 'data':
                 result = result.data
 
