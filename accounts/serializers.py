@@ -13,6 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         return super().create(validated_data)
 
+
 class CreateAccountSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)
     password = serializers.CharField(max_length=128)
