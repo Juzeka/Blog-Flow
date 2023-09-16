@@ -15,7 +15,7 @@ class ArticleServices:
             raise ValidationError(detail=detail)
 
     def validation_user_author(self):
-        detail={'detail': 'Somente um autor pode criar um artigo.'}
+        detail = {'detail': 'Somente um autor pode criar um artigo.'}
 
         if not getattr(self.user, 'author', False):
             raise PermissionDenied(detail=detail)
