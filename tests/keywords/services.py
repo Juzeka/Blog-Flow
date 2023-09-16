@@ -1,5 +1,6 @@
 from utilities.tests import TestCase
 from rest_framework.utils.serializer_helpers import ReturnDict
+from rest_framework.exceptions import ValidationError
 from parameterized import parameterized
 from keywords.services import KeywordServices
 from keywords.serializers import KeywordSerializer
@@ -15,6 +16,10 @@ CASE_CREATE_MULTIPLE = [
         {'datas': DATAS_CREATE_MULTIPLE, 'return_type': 'serializer'},
         KeywordSerializer
     ),
+]
+TEST_CASE_EXCEPTION_VALIDATION = [
+    ({'datas': [1, 2]}, 'Formato do keyword incorreto, tente: {"name": "value"}'),
+    ({'datas': DATAS_CREATE_MULTIPLE, 'return_type': 'test'}, 'Tipo de retorno incorreto.'),
 ]
 
 
@@ -34,3 +39,12 @@ class keywordServicesTestCase(TestCase):
 
         self.assertIsInstance(return_list, list)
         self.assertIsInstance(return_list[0], type_expected)
+
+    @parameterized.expand(TEST_CASE_EXCEPTION_VALIDATION)
+    def test_exception_validation_format_datas_in_data_multiple(self, data, msg):
+        try:
+            KeywordServices(data_multiple=data).create_multiple()
+        except ValidationError as e:
+            detail = e.detail['detail'].capitalize()
+
+            self.assertEqual(detail, msg)
