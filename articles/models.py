@@ -28,9 +28,8 @@ class Article(CreatedUpdatedAt):
         related_name='a_categories',
         verbose_name='Categoria'
     )
-    keywords = models.ForeignKey(
+    keywords = models.ManyToManyField(
         to='keywords.Keyword',
-        on_delete=models.DO_NOTHING,
         related_name='a_keywords',
         verbose_name='Palavras-chave'
     )
