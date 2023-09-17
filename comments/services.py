@@ -1,3 +1,4 @@
+from rest_framework.exceptions import NotFound
 from utilities.choices import WAITING_APPROVED_CHOICE
 from comments.serializers import CommentSerializer, CommentContentSerializer
 from comments.models import Comment
@@ -48,3 +49,10 @@ class CommentServices:
             serializer = CommentSerializer(instance=instance)
 
         return serializer
+
+    def destory(self):
+        try:
+            instance = Comment.objects.get(id=self.id)
+            instance.delete()
+        except Comment.DoesNotExist:
+            raise NotFound(detail={'detail': 'Comentário não encotrado.'})
