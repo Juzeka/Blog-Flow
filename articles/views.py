@@ -40,7 +40,7 @@ class ArticleViewSet(ModelViewSet):
             response = ArticleServices(
                 user=request.user,
                 instance=self.get_object(),
-                is_publish=kwargs.get('is_publish', False)
+                is_publish=request.data.get('is_publish', False)
             ).publish()
 
         return Response(response)
@@ -68,6 +68,6 @@ class ArticleViewSet(ModelViewSet):
         with transaction.atomic():
             self.get_object()
 
-            CommentServices(id=kwargs.get('id', -1)).destory()
+            CommentServices(id=kwargs.get('comment_id', -1)).destory()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
