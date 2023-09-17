@@ -33,7 +33,7 @@ class Article(CreatedUpdatedAt):
         related_name='a_keywords',
         verbose_name='Palavras-chave'
     )
-    is_visible = models.BooleanField(default=True, verbose_name='Visível')
+    is_visible = models.BooleanField(default=False, verbose_name='Visível')
 
     def __str__(self) -> str:
         return f'{self.id} - {self.title}'
