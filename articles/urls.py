@@ -3,5 +3,9 @@ from articles.views import ArticleViewSet
 
 
 urlpatterns = [
-    path('', ArticleViewSet.as_view(actions={'post': 'create'}))
+    path('', ArticleViewSet.as_view(actions={'post': 'create'})),
+    path(
+        '<int:id>/publish/',
+        ArticleViewSet.as_view(actions={'post': 'publish'})
+    )
 ]
