@@ -9,7 +9,9 @@ urlpatterns = [
     ),
     path(
         '<int:id>/',
-        ArticleViewSet.as_view(actions={'get': 'retrieve'})
+        ArticleViewSet.as_view(
+            actions={'get': 'retrieve', 'delete': 'destroy'}
+        )
     ),
     path(
         '<int:id>/publish/',
