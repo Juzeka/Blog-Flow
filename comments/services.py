@@ -1,9 +1,12 @@
-from comments.serializers import CommentSerializer
+from utilities.choices import WAITING_APPROVED_CHOICE
+from comments.serializers import CommentSerializer, CommentContentSerializer
+from comments.models import Comment
 
 
 class CommentServices:
     def __init__(self, *args, **kwargs) -> None:
         self.user = kwargs.get('user')
+        self.id = kwargs.get('id')
         self.article = kwargs.get('article')
         self.data_request = kwargs.get('data_request')
 
@@ -22,3 +25,26 @@ class CommentServices:
         }
 
         return detail
+
+    def update(self):
+        instance = Comment.objects.get(id=self.id, article=self.article.id)
+        content_serializer = CommentContentSerializer(data=self.data_request)
+        is_valid = content_serializer.is_valid()
+
+        if is_valid:
+            data = {
+                **content_serializer.data,
+                'status': WAITING_APPROVED_CHOICE
+            }
+
+            serializer = CommentSerializer(
+                instance=instance,
+                data=data,
+                partial=True
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        else:
+            serializer = CommentSerializer(instance=instance)
+
+        return serializer
