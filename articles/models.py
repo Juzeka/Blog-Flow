@@ -20,7 +20,7 @@ class Article(CreatedUpdatedAt):
         to='author.Author',
         on_delete=models.PROTECT,
         related_name='a_authors',
-        verbose_name='Categoria'
+        verbose_name='Author'
     )
     category = models.ForeignKey(
         to='categories.Category',
