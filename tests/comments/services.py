@@ -1,7 +1,13 @@
 from utilities.tests import BaseViewTestCase
+from parameterized import parameterized
 from accounts.factories import UserFactory
 from articles.factories import ArticleFactory
 from comments.services import CommentServices
+from comments.factories import CommentFactory
+from comments.serializers import CommentSerializer
+
+
+TESTE_CASE_UPDATE = [({'content': 'conteudo update'},), ({},),]
 
 
 class CommentServicesTestCase(BaseViewTestCase):
@@ -19,3 +25,15 @@ class CommentServicesTestCase(BaseViewTestCase):
         ).create()
 
         self.assertEqual(result['detail'], detail)
+
+    @parameterized.expand(TESTE_CASE_UPDATE)
+    def test_update(self, data):
+        comment = CommentFactory()
+
+        result = CommentServices(
+            id=comment.id,
+            article=comment.article,
+            data_request=data
+        ).update()
+
+        self.assertIsInstance(result, CommentSerializer)
