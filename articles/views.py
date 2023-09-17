@@ -45,3 +45,13 @@ class ArticleViewSet(ModelViewSet):
         ).create()
 
         return Response(response, status.HTTP_201_CREATED)
+
+    def update_comment(self, request, *args, **kwargs):
+        with transaction.atomic():
+            serializer = CommentServices(
+                id=kwargs.get('comment_id'),
+                article=self.get_object(),
+                data_request=request.data
+            ).update()
+
+        return Response(serializer.data)
