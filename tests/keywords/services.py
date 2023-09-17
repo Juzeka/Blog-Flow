@@ -18,7 +18,7 @@ CASE_CREATE_MULTIPLE = [
     ),
 ]
 TEST_CASE_EXCEPTION_VALIDATION = [
-    ({'datas': [1, 2]}, 'Formato do keyword incorreto, tente: {"name": "value"}'),
+    ({'datas': [1, 2]}, 'Formato do keyword incorreto, tente: [{"name": "value"}]'),
     ({'datas': DATAS_CREATE_MULTIPLE, 'return_type': 'test'}, 'Tipo de retorno incorreto.'),
 ]
 
