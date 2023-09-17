@@ -9,6 +9,7 @@ def trigger_task(task, *args, **kwargs):
     else:
         return task(*args, **kwargs)
 
+
 @app.task
 def notify_email(**kwargs):
     subject = kwargs.get('subject')

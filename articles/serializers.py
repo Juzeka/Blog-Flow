@@ -4,6 +4,7 @@ from categories.serializers import CategoryDetailSerializer
 from keywords.serializers import KeywordSerializer
 from comments.serializers import CommentDetailSerializer
 
+
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
