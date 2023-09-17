@@ -88,3 +88,15 @@ class ArticleViewSetTestCase(BaseViewTestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_list(self):
+        user = UserFactory()
+        author = AuthorFactory(user=user)
+        articles = ArticleFactory.create_batch(size=3, author=author)
+
+        self.get_token(username=user.username, password='password123')
+
+        response = self.client.get(path=f'{self.base_router}/', **self.headers)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], len(articles))
