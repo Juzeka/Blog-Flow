@@ -9,6 +9,7 @@ from articles.services import ArticleServices
 class ArticleViewSet(ModelViewSet):
     serializer_class = ArticleDetailSerializer
     queryset = Article.objects.all()
+    lookup_field = 'id'
 
     def get_queryset(self):
         if getattr(self.request.user, 'author', False):
@@ -24,3 +25,13 @@ class ArticleViewSet(ModelViewSet):
             ).create()
 
         return Response(serializer.data, status.HTTP_201_CREATED)
+
+    def publish(self, request, *args, **kwargs):
+        with transaction.atomic():
+            response = ArticleServices(
+                user=request.user,
+                instance=self.get_object(),
+                is_publish=kwargs.get('is_publish', False)
+            ).publish()
+
+        return Response(response)
