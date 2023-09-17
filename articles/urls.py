@@ -8,6 +8,10 @@ urlpatterns = [
         ArticleViewSet.as_view(actions={'post': 'create', 'get': 'list'})
     ),
     path(
+        '<int:id>/',
+        ArticleViewSet.as_view(actions={'get': 'retrieve'})
+    ),
+    path(
         '<int:id>/publish/',
         ArticleViewSet.as_view(actions={'post': 'publish'})
     ),
