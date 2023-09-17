@@ -5,6 +5,7 @@ from accounts.factories import UserFactory
 from author.factories import AuthorFactory
 from categories.factories import CategoryFactory
 from articles.factories import ArticleFactory
+from comments.factories import CommentFactory
 
 
 TEST_CASE_CREATE_EXCEPTION = [
@@ -12,6 +13,7 @@ TEST_CASE_CREATE_EXCEPTION = [
     ({}, True, status.HTTP_400_BAD_REQUEST),
 ]
 TEST_CASE_PUBLISH = [(True,), (False),]
+TESTE_CASE_UPDATE = [({'content': 'conteudo update'},), ({},),]
 
 
 class ArticleViewSetTestCase(BaseViewTestCase):
@@ -130,3 +132,22 @@ class ArticleViewSetTestCase(BaseViewTestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    @parameterized.expand(TESTE_CASE_UPDATE)
+    def test_update(self, data):
+        article = ArticleFactory()
+        comment = CommentFactory(article=article, user=article.author.user)
+
+        self.get_token(
+            username=article.author.user.username,
+            password='password123'
+        )
+
+        response = self.client.patch(
+            path=f'{self.base_router}/{article.id}/comments/{comment.id}/',
+            data=data,
+            content_type='application/json',
+            **self.headers
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
