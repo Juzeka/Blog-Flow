@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from articles.serializers import Article, ArticleDetailSerializer
 from articles.services import ArticleServices
+from comments.services import CommentServices
 
 
 class ArticleViewSet(ModelViewSet):
@@ -35,3 +36,12 @@ class ArticleViewSet(ModelViewSet):
             ).publish()
 
         return Response(response)
+
+    def create_comment(self, request, *args, **kwargs):
+        response = CommentServices(
+            user=request.user,
+            article=self.get_object(),
+            data_request=request.data
+        ).create()
+
+        return Response(response, status.HTTP_201_CREATED)
