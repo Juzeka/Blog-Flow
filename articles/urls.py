@@ -10,5 +10,9 @@ urlpatterns = [
     path(
         '<int:id>/publish/',
         ArticleViewSet.as_view(actions={'post': 'publish'})
-    )
+    ),
+    path(
+        '<int:id>/comments/',
+        ArticleViewSet.as_view(actions={'post': 'create_comment'})
+    ),
 ]
