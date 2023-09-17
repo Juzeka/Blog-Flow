@@ -2,13 +2,13 @@ from django.db import transaction
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.response import Response
-from articles.serializers import Article, ArticleDetailSerializer
+from articles.serializers import Article, ArticleDetailFullSerializer
 from articles.services import ArticleServices
 from comments.services import CommentServices
 
 
 class ArticleViewSet(ModelViewSet):
-    serializer_class = ArticleDetailSerializer
+    serializer_class = ArticleDetailFullSerializer
     queryset = Article.objects.all()
     lookup_field = 'id'
 
