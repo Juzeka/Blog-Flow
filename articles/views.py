@@ -63,3 +63,11 @@ class ArticleViewSet(ModelViewSet):
             ).update()
 
         return Response(serializer.data)
+
+    def destroy_comment(self, request, *args, **kwargs):
+        with transaction.atomic():
+            self.get_object()
+
+            CommentServices(id=kwargs.get('id', -1)).destory()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

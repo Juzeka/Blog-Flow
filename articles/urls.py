@@ -23,6 +23,8 @@ urlpatterns = [
     ),
     path(
         '<int:id>/comments/<int:comment_id>/',
-        ArticleViewSet.as_view(actions={'patch': 'update_comment'})
+        ArticleViewSet.as_view(
+            actions={'patch': 'update_comment', 'delete': 'destory'}
+        )
     ),
 ]
