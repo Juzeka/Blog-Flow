@@ -22,6 +22,7 @@ INSTALLED_APPS = [
 ]
 
 INSTALLED_APPS += [
+    'drf_yasg',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
@@ -118,6 +119,16 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': True,
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    }
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
