@@ -3,5 +3,8 @@ from categories.views import CategoryViewSet
 
 
 urlpatterns = [
-    path('', CategoryViewSet.as_view(actions={'post': 'create'}))
+    path(
+        '',
+        CategoryViewSet.as_view(actions={'post': 'create', 'get': 'list'})
+    ),
 ]
