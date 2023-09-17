@@ -1,4 +1,5 @@
 from utilities.tests import BaseViewTestCase
+from rest_framework.exceptions import NotFound
 from parameterized import parameterized
 from accounts.factories import UserFactory
 from articles.factories import ArticleFactory
@@ -37,3 +38,18 @@ class CommentServicesTestCase(BaseViewTestCase):
         ).update()
 
         self.assertIsInstance(result, CommentSerializer)
+
+    def test_destory(self):
+        comment = CommentFactory()
+
+        result = CommentServices(id=comment.id).destory()
+
+        self.assertIsNone(result)
+
+    def test_destory_exception(self):
+        try:
+            CommentServices(id=-1).destory()
+        except NotFound as e:
+            detail = e.detail['detail'].capitalize()
+
+            self.assertEqual(detail, 'Comentário não encotrado.')
