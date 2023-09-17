@@ -1,3 +1,4 @@
+from utilities.tasks import trigger_task, notify_email
 from accounts.serializers import UserSerializer, CreateAccountSerializer
 from author.serializers import AuthorSerializer
 
@@ -30,5 +31,15 @@ class AccountServices:
         self.instance_user = serializer.instance
 
         self.create_author()
+
+        if serializer.instance.email:
+            params = {
+                'subject': 'Nova conta',
+                'message': 'Parabéns, sua conta foi criada com sucesso.',
+                'from_email': 'no-reply@blogflow.com',
+                'recipient_list': [serializer.instance.email]
+            }
+
+            trigger_task(task=notify_email, kwargs=params)
 
         return serializer

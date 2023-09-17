@@ -2,6 +2,7 @@ from rest_framework.exceptions import NotFound
 from utilities.choices import WAITING_APPROVED_CHOICE
 from comments.serializers import CommentSerializer, CommentContentSerializer
 from comments.models import Comment
+from utilities.tasks import trigger_task, notify_email
 
 
 class CommentServices:
@@ -24,6 +25,19 @@ class CommentServices:
         detail = {
             'detail': 'Comentário enviado com sucesso, sujeito à aprovação.'
         }
+
+        if self.user.email:
+            params = {
+                'subject': 'Novo artigo',
+                'message': '''
+                    Seu artigo foi criado com sucesso e está pronto para ser
+                    publicado.
+                ''',
+                'from_email': 'no-reply@blogflow.com',
+                'recipient_list': [self.user.email]
+            }
+
+            trigger_task(task=notify_email, kwargs=params)
 
         return detail
 
