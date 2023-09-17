@@ -8,6 +8,11 @@ class KeywordSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class KeywordDetailArticleSerializer(KeywordSerializer):
+    class Meta(KeywordSerializer.Meta):
+        fields = ['id', 'name']
+
+
 class NameChildSerializer(serializers.Serializer):
     name = serializers.CharField()
 
