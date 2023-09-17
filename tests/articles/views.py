@@ -1,16 +1,17 @@
 from utilities.tests import BaseViewTestCase
 from rest_framework import status
 from parameterized import parameterized
-from rest_framework.exceptions import PermissionDenied, ValidationError
 from accounts.factories import UserFactory
 from author.factories import AuthorFactory
 from categories.factories import CategoryFactory
+from articles.factories import ArticleFactory
 
 
 TEST_CASE_CREATE_EXCEPTION = [
     ({}, False, status.HTTP_403_FORBIDDEN),
     ({}, True, status.HTTP_400_BAD_REQUEST),
 ]
+TEST_CASE_PUBLISH = [(True,), (False),]
 
 
 class ArticleViewSetTestCase(BaseViewTestCase):
@@ -55,3 +56,35 @@ class ArticleViewSetTestCase(BaseViewTestCase):
         response = self.base_create(username=user.username, data=data)
 
         self.assertEqual(response.status_code, expected)
+
+    @parameterized.expand(TEST_CASE_PUBLISH)
+    def test_publish(self, is_publish):
+        instance = ArticleFactory()
+
+        self.get_token(
+            username=instance.author.user.username,
+            password='password123'
+        )
+
+        response = self.client.post(
+            path=f'{self.base_router}/{instance.id}/publish/',
+            data={'is_publish': is_publish},
+            content_type='application/json',
+            **self.headers
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_publish_exception(self):
+        instance = ArticleFactory()
+
+        self.get_token(username=UserFactory().username, password='password123')
+
+        response = self.client.post(
+            path=f'{self.base_router}/{instance.id}/publish/',
+            data={'is_publish': ''},
+            content_type='application/json',
+            **self.headers
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
