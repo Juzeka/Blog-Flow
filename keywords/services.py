@@ -14,9 +14,9 @@ class KeywordServices:
     def validation_format_datas_in_data_multiple(self):
         serializer = KeywordMultipleSerializer(data=self.data_multiple)
         is_valid = serializer.is_valid()
-        detail = {
-            'detail': 'Formato do keyword incorreto, tente: {"name": "value"}'
-        }
+
+        msg = 'Formato do keyword incorreto, tente: [{"name": "value"}]'
+        detail = {'detail': msg}
 
         if not is_valid:
             if serializer.errors.get('return_type', False):
