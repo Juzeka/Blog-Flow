@@ -10,6 +10,12 @@ class ArticleViewSet(ModelViewSet):
     serializer_class = ArticleDetailSerializer
     queryset = Article.objects.all()
 
+    def get_queryset(self):
+        if getattr(self.request.user, 'author', False):
+            return Article.objects.filter(author=self.request.user.author)
+
+        return super().get_queryset()
+
     def create(self, request, *args, **kwargs):
         with transaction.atomic():
             serializer = ArticleServices(
