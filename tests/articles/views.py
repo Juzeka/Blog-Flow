@@ -35,6 +35,17 @@ class ArticleViewSetTestCase(BaseViewTestCase):
             **self.headers
         )
 
+    def base_destroy(self, is_author=True):
+        article = ArticleFactory()
+        username = article.author.user if is_author else UserFactory()
+
+        self.get_token(username=username.username, password='password123')
+
+        return self.client.delete(
+            path=f'{self.base_router}/{article.id}/',
+            **self.headers
+        )
+
     def test_create(self):
         data = {
             'title': 'Titulo 1',
@@ -118,6 +129,16 @@ class ArticleViewSetTestCase(BaseViewTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_destory(self):
+        response = self.base_destroy()
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_destory_exception(self):
+        response = self.base_destroy(is_author=False)
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_create_comment(self):
         user = UserFactory()
         article = ArticleFactory()
@@ -134,7 +155,7 @@ class ArticleViewSetTestCase(BaseViewTestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     @parameterized.expand(TESTE_CASE_UPDATE)
-    def test_update(self, data):
+    def test_update_comment(self, data):
         article = ArticleFactory()
         comment = CommentFactory(article=article, user=article.author.user)
 
