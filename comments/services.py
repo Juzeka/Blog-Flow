@@ -42,7 +42,11 @@ class CommentServices:
         return detail
 
     def update(self):
-        instance = Comment.objects.get(id=self.id, article=self.article.id)
+        try:
+            instance = Comment.objects.get(id=self.id, article=self.article.id)
+        except Comment.DoesNotExist:
+            raise NotFound(detail={'detail': 'Não encotrado.'})
+
         content_serializer = CommentContentSerializer(data=self.data_request)
         is_valid = content_serializer.is_valid()
 
