@@ -101,6 +101,21 @@ class ArticleViewSetTestCase(BaseViewTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], len(articles))
 
+    def test_retrieve(self):
+        article = ArticleFactory()
+
+        self.get_token(
+            username=article.author.user.username,
+            password='password123'
+        )
+
+        response = self.client.get(
+            path=f'{self.base_router}/{article.id}/',
+            **self.headers
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_create_comment(self):
         user = UserFactory()
         article = ArticleFactory()
