@@ -1,4 +1,4 @@
-from articles.serializers import ArticleSerializer
+from articles.serializers import ArticleSerializer, ArticleDetailSerializer
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from keywords.services import KeywordServices
 
@@ -41,4 +41,4 @@ class ArticleServices:
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return serializer
+        return ArticleDetailSerializer(instance=serializer.instance)
