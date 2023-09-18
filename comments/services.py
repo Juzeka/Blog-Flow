@@ -13,7 +13,7 @@ class CommentServices:
         self.data_request = kwargs.get('data_request')
         self.instance = None
 
-    def get_object(self, **params):
+    def get_object(self, params):
         try:
             self.instance = Comment.objects.get(**params)
             return self.instance
@@ -50,7 +50,9 @@ class CommentServices:
         return detail
 
     def update(self):
-        instance = self.get_object({'id': self.id, 'article': self.article.id})
+        instance = self.get_object(
+            params={'id': self.id, 'article': self.article.id}
+        )
         content_serializer = CommentContentSerializer(data=self.data_request)
         is_valid = content_serializer.is_valid()
 
@@ -73,11 +75,13 @@ class CommentServices:
         return serializer
 
     def destory(self):
-        instance = self.get_object({'id': self.id})
+        instance = self.get_object(params={'id': self.id})
         instance.delete()
 
     def change_status(self):
-        instance = self.get_object({'id': self.id, 'article': self.article})
+        instance = self.get_object(
+            params={'id': self.id, 'article': self.article}
+        )
 
         serializer = CommentSerializer(
             instance=instance,

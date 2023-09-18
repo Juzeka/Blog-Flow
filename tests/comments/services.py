@@ -6,6 +6,7 @@ from articles.factories import ArticleFactory
 from comments.services import CommentServices
 from comments.factories import CommentFactory
 from comments.serializers import CommentSerializer
+from utilities.choices import APPROVED_CHOICE
 
 
 TESTE_CASE_UPDATE = [({'content': 'conteudo update'},), ({},),]
@@ -53,3 +54,14 @@ class CommentServicesTestCase(BaseViewTestCase):
             detail = e.detail['detail'].capitalize()
 
             self.assertEqual(detail, 'Comentário não encotrado.')
+
+    def test_change_status(self):
+        comment = CommentFactory()
+
+        result = CommentServices(
+            article=comment.article,
+            id=comment.id,
+            data_request={'status': APPROVED_CHOICE}
+        ).change_status()
+
+        self.assertIsInstance(result, CommentSerializer)
