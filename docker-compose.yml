@@ -1,0 +1,14 @@
+version: "3"
+services:
+  web:
+    build: .
+    command: gunicorn core.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+  celery:
+    build: .
+    command: celery -A core worker --loglevel=info
+    volumes:
+      - .:/app
