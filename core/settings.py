@@ -12,6 +12,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://blog-flow-production.up.railway.app']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
