@@ -24,7 +24,11 @@ urlpatterns = [
     path(
         '<int:id>/comments/<int:comment_id>/',
         ArticleViewSet.as_view(
-            actions={'patch': 'update_comment', 'delete': 'destroy_comment'}
+            actions={
+                'patch': 'update_comment',
+                'delete': 'destroy_comment',
+                'post': 'change_status_comment'
+            }
         )
     ),
 ]

@@ -11,6 +11,14 @@ class CommentServices:
         self.id = kwargs.get('id')
         self.article = kwargs.get('article')
         self.data_request = kwargs.get('data_request')
+        self.instance = None
+
+    def get_object(self, **params):
+        try:
+            self.instance = Comment.objects.get(**params)
+            return self.instance
+        except Comment.DoesNotExist:
+            raise NotFound(detail={'detail': 'Comentário não encotrado.'})
 
     def create(self):
         data = {
@@ -42,11 +50,7 @@ class CommentServices:
         return detail
 
     def update(self):
-        try:
-            instance = Comment.objects.get(id=self.id, article=self.article.id)
-        except Comment.DoesNotExist:
-            raise NotFound(detail={'detail': 'Não encotrado.'})
-
+        instance = self.get_object({'id': self.id, 'article': self.article.id})
         content_serializer = CommentContentSerializer(data=self.data_request)
         is_valid = content_serializer.is_valid()
 
@@ -69,8 +73,18 @@ class CommentServices:
         return serializer
 
     def destory(self):
-        try:
-            instance = Comment.objects.get(id=self.id)
-            instance.delete()
-        except Comment.DoesNotExist:
-            raise NotFound(detail={'detail': 'Comentário não encotrado.'})
+        instance = self.get_object({'id': self.id})
+        instance.delete()
+
+    def change_status(self):
+        instance = self.get_object({'id': self.id, 'article': self.article})
+
+        serializer = CommentSerializer(
+            instance=instance,
+            data={'status': self.data_request.get('status')},
+            partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return serializer

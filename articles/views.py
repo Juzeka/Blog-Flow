@@ -162,3 +162,12 @@ class ArticleViewSet(ModelViewSet):
             CommentServices(id=kwargs.get('comment_id', -1)).destory()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def change_status_comment(self, request, *args, **kwargs):
+        serializer = CommentServices(
+            article=self.get_object(),
+            id=kwargs.get('comment_id', -1),
+            data_request=request.data
+        )
+
+        return Response(serializer.data)
