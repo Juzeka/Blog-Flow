@@ -1,6 +1,5 @@
 Django==4.2.3
 djangorestframework==3.14.0
-python-decouple==3.8
 django-cors-headers==4.2.0
 djangorestframework-simplejwt==5.2.2
 django-factory-boy==1.0.0
@@ -9,6 +8,11 @@ django-celery-beat==2.5.0
 django-celery-results==2.5.1
 
 drf-yasg==1.21.7
+
+python-decouple==3.8
+dj-database-url==0.5.0
+dj-static==0.0.6
+psycopg2-binary==2.9.7
 
 gunicorn==21.2.0
 whitenoise==6.5.0
