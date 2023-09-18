@@ -82,6 +82,24 @@ DATABASES = {
     }
 }
 
+URL_REDIS_CACHE = config('URL_REDIS_CACHE', default=None)
+
+default_cache = 'django.core.cache.backends.dummy.DummyCache'
+
+if bool(URL_REDIS_CACHE):
+    default_cache = {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': URL_REDIS_CACHE,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+
+CACHES = {
+    'default': {
+        'BACKEND': default_cache
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
