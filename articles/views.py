@@ -1,4 +1,6 @@
 from django.db import transaction
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.response import Response
@@ -7,6 +9,8 @@ from articles.services import ArticleServices
 from comments.services import CommentServices
 
 
+@method_decorator(name='list', decorator=cache_page(60 * 10))
+@method_decorator(name='retrieve', decorator=cache_page(60 * 10))
 class ArticleViewSet(ModelViewSet):
     serializer_class = ArticleDetailFullSerializer
     queryset = Article.objects.all()
