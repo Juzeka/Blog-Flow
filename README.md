@@ -3,6 +3,9 @@
 
 Uma API simples de um MVP (Minimum Viable Product) para um Blog Flow a qual permite criar, visualizar, editar e excluir artigos em um blog e dentre outras funcionalidades basicas.
 
+Credenciais pré-existente: username: admin e password: admin
+- [**Acesse aqui**](https://blog-flow-production.up.railway.app/)
+
 ## Visualização com Swagger
 ![Visualização](https://github.com/Juzeka/Blog-Flow/blob/master/visualization.png?raw=true)
 
