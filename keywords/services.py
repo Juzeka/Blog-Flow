@@ -82,32 +82,51 @@ class KeywordServices:
 
         return serializer
 
-    def update_or_create_multiple(self):
+    def update_or_create(self):
+        queryset = Keyword.objects.filter(id=self.data['id'])
+
+        if queryset.exists():
+            serializer = KeywordSerializer(
+                instance=queryset.first(),
+                data=self.data,
+                partial=True
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        else:
+            serializer = self.create()
+
+        return serializer
+
+    def destroy(self):
+        queryset = Keyword.objects.filter(id=self.data.get('id', -1))
+
+        if queryset.exists():
+            instance = queryset.first()
+            instance.delete()
+
+    def set(self):
         self.type = 'id'
         return_list = list()
 
         if self.datas:
             for data in self.datas:
-                if data.get('id', False):
-                    queryset = Keyword.objects.filter(id=data['id'])
+                is_destroy = False
+                self.data = data
 
-                    if queryset.exists():
-                        serializer = KeywordSerializer(
-                            instance=queryset.first(),
-                            data=data,
-                            partial=True
-                        )
-                        serializer.is_valid(raise_exception=True)
-                        serializer.save()
+                if data.get('id', False):
+                    is_destroy = data.get('destroy', False)
+
+                    if is_destroy:
+                        self.destroy()
                     else:
-                        self.data = data
-                        serializer = self.create()
+                        serializer = self.update_or_create()
                 else:
-                    self.data = data
                     serializer = self.create()
 
-                result = self.return_type(serializer=serializer)
-                return_list.append(result)
+                if not is_destroy:
+                    result = self.return_type(serializer=serializer)
+                    return_list.append(result)
 
         if return_list:
             return_list = self.concat_list_keywords_with_existing(
