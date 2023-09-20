@@ -10,6 +10,7 @@ from articles.services import ArticleServices
 from comments.services import CommentServices
 from core.schema_parameters import (
     REQUEST_BODY_CREATE_ARTICLE,
+    REQUEST_BODY_UPDATE_ARTICLE,
     REQUEST_BODY_PUBLISH_ARTICLE,
     REQUEST_BODY_CREATE_COMMENT,
     REQUEST_BODY_UPDATE_COMMENT,
@@ -58,6 +59,16 @@ from core.schema_responses import RESPONSE_CREATE_ARTICLE
         operation_id='accounts_create',
         operation_summary='Criação de artigo.',
         request_body=REQUEST_BODY_CREATE_ARTICLE,
+        responses=RESPONSE_CREATE_ARTICLE
+    ),
+)
+@method_decorator(
+    name='update',
+    decorator=swagger_auto_schema(
+        tags=['Articles'],
+        operation_id='accounts_update',
+        operation_summary='Edição de artigo.',
+        request_body=REQUEST_BODY_UPDATE_ARTICLE,
         responses=RESPONSE_CREATE_ARTICLE
     ),
 )
