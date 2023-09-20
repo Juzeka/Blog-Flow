@@ -17,6 +17,10 @@ class NameChildSerializer(serializers.Serializer):
     name = serializers.CharField()
 
 
+class NameIdChildSerializer(NameChildSerializer):
+    id = serializers.IntegerField(required=False)
+
+
 class KeywordMultipleSerializer(serializers.Serializer):
     datas = serializers.ListField(child=NameChildSerializer())
     return_type = serializers.ChoiceField(
