@@ -14,10 +14,15 @@ Credenciais pré-existente: username: admin e password: admin
 - Login de conta
 - Atualização do Token de Login
 - Listagem de Categorias
+- Informações do usuário
 - Criação de Categorias
+- Detalhe de Categoria
+- Edição de Categoria
+- Deleção de Categoria
 - Listagem de Artigos
 - Criação de Artigos
 - Detalhe de Artigo
+- Edição de Artigo
 - Deleção de Artigo
 - Publicação de Artigo
 - Criação de Comentários
