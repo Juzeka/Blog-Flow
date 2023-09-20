@@ -27,7 +27,3 @@ class KeywordMultipleSerializer(serializers.Serializer):
         choices=['serializer', 'instance', 'data', 'id'],
         default='serializer'
     )
-
-
-class KeywordUpdateMultipleSerializer(serializers.Serializer):
-    datas = serializers.ListField(child=NameIdChildSerializer())

@@ -1,8 +1,7 @@
 from rest_framework.exceptions import ValidationError
 from keywords.serializers import (
     KeywordSerializer,
-    KeywordMultipleSerializer,
-    KeywordUpdateMultipleSerializer
+    KeywordMultipleSerializer
 )
 from keywords.models import Keyword
 
