@@ -107,6 +107,14 @@ from core.schema_responses import RESPONSE_CREATE_ARTICLE
         request_body=REQUEST_BODY_CHANGE_STATUS_COMMENT
     )
 )
+@method_decorator(
+    name='retrieve_comment',
+    decorator=swagger_auto_schema(
+        tags=['Comments'],
+        operation_id='accounts_comments_retrieve',
+        operation_summary='Detalhe do comentário.'
+    )
+)
 @method_decorator(name='list', decorator=cache_page(60 * 10))
 @method_decorator(name='retrieve', decorator=cache_page(60 * 10))
 class ArticleViewSet(ModelViewSet):
@@ -165,6 +173,14 @@ class ArticleViewSet(ModelViewSet):
         ).create()
 
         return Response(response, status.HTTP_201_CREATED)
+
+    def retrieve_comment(self, request, *args, **kwargs):
+        serializer = CommentServices(
+            id=kwargs.get('id', -1),
+            article=self.get_object()
+        ).retrieve()
+
+        return Response(serializer.data)
 
     def update_comment(self, request, *args, **kwargs):
         with transaction.atomic():

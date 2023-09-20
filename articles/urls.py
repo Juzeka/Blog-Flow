@@ -27,7 +27,8 @@ urlpatterns = [
             actions={
                 'patch': 'update_comment',
                 'delete': 'destroy_comment',
-                'post': 'change_status_comment'
+                'post': 'change_status_comment',
+                'get': 'retrieve_comment'
             }
         )
     ),
