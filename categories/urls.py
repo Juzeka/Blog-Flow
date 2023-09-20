@@ -7,4 +7,10 @@ urlpatterns = [
         '',
         CategoryViewSet.as_view(actions={'post': 'create', 'get': 'list'})
     ),
+    path(
+        '<int:id>/',
+        CategoryViewSet.as_view(
+            actions={'delete': 'destroy', 'get': 'retrieve', 'put': 'update'}
+        )
+    ),
 ]
