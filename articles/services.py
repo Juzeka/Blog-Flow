@@ -1,4 +1,8 @@
-from articles.serializers import ArticleSerializer, ArticleDetailSerializer
+from articles.serializers import (
+    ArticleSerializer,
+    ArticleDetailSerializer,
+    ArticleUpdateSerializer
+)
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from keywords.services import KeywordServices
 from utilities.choices import PUBLISHED_CHOICE, CANCELED_CHOICE
@@ -44,6 +48,29 @@ class ArticleServices:
             'keywords': keywords
         }
         serializer = ArticleSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return ArticleDetailSerializer(instance=serializer.instance)
+
+    def update(self):
+        self.detail = {'detail': 'Somente um author pode editar um artigo.'}
+        self.validation_user_author()
+
+        keywords = self.data_request.get('keywords', False)
+        list_keywords = KeywordServices(
+            datas=keywords,
+            queryset=self.instance.keywords
+        ).update_or_create_multiple()
+
+        if keywords and list_keywords:
+            self.data_request.update({'keywords': list_keywords})
+
+        serializer = ArticleUpdateSerializer(
+            instance=self.instance,
+            data=self.data_request,
+            partial=True
+        )
         serializer.is_valid(raise_exception=True)
         serializer.save()
 

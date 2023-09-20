@@ -24,3 +24,11 @@ class ArticleDetailFullSerializer(ArticleSerializer):
             'id', 'title', 'subtitle', 'content', 'status', 'author',
             'category', 'keywords', 'is_visible', 'comments'
         ]
+
+
+class ArticleUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        fields = [
+            'id', 'title', 'subtitle', 'content', 'category', 'keywords'
+        ]

@@ -10,7 +10,7 @@ urlpatterns = [
     path(
         '<int:id>/',
         ArticleViewSet.as_view(
-            actions={'get': 'retrieve', 'delete': 'destroy'}
+            actions={'get': 'retrieve', 'delete': 'destroy', 'put': 'update'}
         )
     ),
     path(

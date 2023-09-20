@@ -40,6 +40,23 @@ REQUEST_BODY_CREATE_ARTICLE = openapi.Schema(
 )
 
 
+REQUEST_BODY_UPDATE_ARTICLE = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    title='ArticleUpdate',
+    properties={
+        'title': openapi.Schema(type=openapi.TYPE_STRING),
+        'subtitle': openapi.Schema(type=openapi.TYPE_STRING),
+        'content': openapi.Schema(type=openapi.TYPE_STRING),
+        'category': openapi.Schema(type=openapi.TYPE_INTEGER),
+        'keywords': openapi.Schema(
+            type=openapi.TYPE_STRING,
+            items=None,
+            example=[{"id": 1, "name": "value"}, {"name": "value"}]
+        ),
+    }
+)
+
+
 REQUEST_BODY_PUBLISH_ARTICLE = openapi.Schema(
     type=openapi.TYPE_OBJECT,
     title='ArticlePublish',
