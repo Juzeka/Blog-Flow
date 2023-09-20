@@ -6,6 +6,7 @@ from author.factories import AuthorFactory
 from categories.factories import CategoryFactory
 from articles.factories import ArticleFactory
 from comments.factories import CommentFactory
+from keywords.factories import KeywordFactory
 
 
 TEST_CASE_CREATE_EXCEPTION = [
@@ -14,6 +15,21 @@ TEST_CASE_CREATE_EXCEPTION = [
 ]
 TEST_CASE_PUBLISH = [(True,), (False),]
 TESTE_CASE_UPDATE = [({'content': 'conteudo update'},), ({},),]
+TESTE_CASE_UPDATE_ARTICLE = [
+    ({'title': 'editando titulo'}, False),
+    ({'title': 'editando titulo 2', 'subtitle': 'editando subtitle'}, False),
+    (
+        {
+            'keywords': [
+                {'name': 'Nova key'},
+                {'id': 99, 'name': 'editando key'},
+                {'id': -1, 'name': 'nova key apartir de um id inexistente'},
+                {'id': 98, 'destroy': True}
+            ]
+        },
+        True
+    )
+]
 
 
 class ArticleViewSetTestCase(BaseViewTestCase):
@@ -166,6 +182,28 @@ class ArticleViewSetTestCase(BaseViewTestCase):
 
         response = self.client.patch(
             path=f'{self.base_router}/{article.id}/comments/{comment.id}/',
+            data=data,
+            content_type='application/json',
+            **self.headers
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @parameterized.expand(TESTE_CASE_UPDATE_ARTICLE)
+    def test_update(self, data, is_keywords):
+        article = ArticleFactory()
+
+        if is_keywords:
+            KeywordFactory(id=99)
+            KeywordFactory(id=98)
+
+        self.get_token(
+            username=article.author.user.username,
+            password='password123'
+        )
+
+        response = self.client.put(
+            path=f'{self.base_router}/{article.id}/',
             data=data,
             content_type='application/json',
             **self.headers
