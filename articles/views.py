@@ -118,6 +118,16 @@ class ArticleViewSet(ModelViewSet):
 
         return Response(serializer.data, status.HTTP_201_CREATED)
 
+    def update(self, request, *args, **kwargs):
+        with transaction.atomic():
+            serializer = ArticleServices(
+                user=request.user,
+                instance=self.get_object(),
+                data_request=request.data
+            ).update()
+
+        return Response(serializer.data)
+
     def destroy(self, request, *args, **kwargs):
         services = ArticleServices(user=request.user)
         services.detail = {'detail': 'Somente um autor pode apagar o artigo.'}
