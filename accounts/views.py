@@ -13,6 +13,7 @@ from core.schema_parameters import REQUEST_BODY_CREATE_ACCOUNT
 from core.schema_responses import (
     RESPONSE_CREATE_ACCOUNT,
 )
+from django.contrib.auth.models import User
 
 
 class CreateAccountViewSet(ViewSet):
@@ -36,6 +37,20 @@ class CreateAccountViewSet(ViewSet):
         response = {'detail': 'Conta criada com sucesso.'}
 
         return Response(data=response, status=status.HTTP_201_CREATED)
+
+
+class AccountMeViewSet(ViewSet):
+    queryset = User.objects.filter(is_active=True)
+
+    @swagger_auto_schema(
+        tags=['Accounts'],
+        operation_id='account_me',
+        operation_summary='Informações do usuário.',
+    )
+    def me(self, request, *args, **kwargs):
+        serializer = AccountServices(instance_user=request.user).me()
+        return Response(serializer.data)
+
 
 
 @method_decorator(

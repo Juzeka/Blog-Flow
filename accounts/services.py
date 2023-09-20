@@ -1,13 +1,19 @@
 from utilities.tasks import trigger_task, notify_email
-from accounts.serializers import UserSerializer, CreateAccountSerializer
+from rest_framework.exceptions import NotFound
+from accounts.serializers import (
+    UserSerializer,
+    UserMeSerializer,
+    CreateAccountSerializer
+)
 from author.serializers import AuthorSerializer
+from django.contrib.auth.models import User
 
 
 class AccountServices:
     def __init__(self, *args, **kwargs) -> None:
         self.data_request = kwargs.get('data_request', None)
         self.data_create = None
-        self.instance_user = None
+        self.instance_user = kwargs.get('instance_user', None)
 
     def validate_data_create(self):
         self.data_create = CreateAccountSerializer(data=self.data_request)
@@ -43,3 +49,10 @@ class AccountServices:
             trigger_task(task=notify_email, kwargs=params)
 
         return serializer
+
+    def me(self):
+        try:
+            serializer = UserMeSerializer(instance=self.instance_user)
+            return serializer
+        except User.DoesNotExist:
+            raise NotFound(detail={'detail': 'Usuário não encotrado.'})
