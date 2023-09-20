@@ -51,7 +51,11 @@ REQUEST_BODY_UPDATE_ARTICLE = openapi.Schema(
         'keywords': openapi.Schema(
             type=openapi.TYPE_STRING,
             items=None,
-            example=[{"id": 1, "name": "value"}, {"name": "value"}]
+            example=[
+                {"id": 1, "name": "value"},
+                {"id": 2, "destroy": True},
+                {"name": "value"}
+            ]
         ),
     }
 )

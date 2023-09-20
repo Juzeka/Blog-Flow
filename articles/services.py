@@ -61,7 +61,7 @@ class ArticleServices:
         list_keywords = KeywordServices(
             datas=keywords,
             queryset=self.instance.keywords
-        ).update_or_create_multiple()
+        ).set()
 
         if keywords and list_keywords:
             self.data_request.update({'keywords': list_keywords})
