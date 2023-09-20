@@ -6,3 +6,9 @@ class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = '__all__'
+
+
+class AuthorMeSerializer(AuthorSerializer):
+    class Meta:
+        model = Author
+        fields = ['id', 'bibliography']
