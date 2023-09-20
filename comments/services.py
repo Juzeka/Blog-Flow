@@ -20,6 +20,15 @@ class CommentServices:
         except Comment.DoesNotExist:
             raise NotFound(detail={'detail': 'Comentário não encotrado.'})
 
+    def retrieve(self):
+        serializer = CommentSerializer(
+            instance=self.get_object(
+                params={'id': self.id, 'article': self.article}
+            )
+        )
+
+        return serializer
+
     def create(self):
         data = {
             **self.data_request,
